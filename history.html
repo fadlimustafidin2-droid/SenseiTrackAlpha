@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riwayat — SenseiTrack</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/logosenseitrack.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        fontFamily: { sans: ['Poppins', 'sans-serif'] },
+        colors: {
+          primary: { DEFAULT: '#2563EB', light: '#3B82F6', dark: '#1D4ED8' },
+          secondary: { DEFAULT: '#14B8A6', light: '#2DD4BF', dark: '#0D9488' },
+        },
+        boxShadow: {
+          soft: '0 10px 30px -10px rgba(15,23,42,0.12)',
+          glow: '0 10px 25px -6px rgba(37,99,235,0.35)',
+        },
+      } },
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>if (!App.requireAuth()) { document.write(''); }</script>
+</head>
+<body class="bg-surface dark:bg-[#0B1220] font-sans text-ink dark:text-slate-100">
+
+  <div class="flex h-screen overflow-hidden">
+    <!-- SIDEBAR -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-64 -translate-x-full lg:translate-x-0 bg-white dark:bg-[#0B1220] border-r border-slate-100 dark:border-slate-800/60 flex flex-col">
+      <div class="h-16 flex items-center gap-2.5 px-5 border-b border-slate-100 dark:border-slate-800/60 flex-shrink-0">
+        <img src="assets/images/logosenseitrack.svg" class="w-8 h-8" alt="" />
+        <span class="font-bold text-lg tracking-tight">SenseiTrack</span>
+        <button id="sidebarCloseBtn" class="ml-auto lg:hidden text-slate-400"><span class="material-symbols-rounded">close</span></button>
+      </div>
+      <nav class="flex-1 overflow-y-auto scrollbar-thin px-3 py-4 space-y-1">
+        <a href="dashboard.html" class="sidebar-link"><span class="material-symbols-rounded">dashboard</span><span data-i18n="nav.dashboard">Dashboard</span></a>
+        <a href="assessment.html" class="sidebar-link"><span class="material-symbols-rounded">edit_note</span><span data-i18n="nav.assessment">Self Assessment</span></a>
+        <a href="history.html" class="sidebar-link active"><span class="material-symbols-rounded icon-fill">history</span><span data-i18n="nav.history">Riwayat</span></a>
+        <a href="profile.html" class="sidebar-link"><span class="material-symbols-rounded">person</span><span data-i18n="nav.profile">Profil</span></a>
+        <a href="settings.html" class="sidebar-link"><span class="material-symbols-rounded">settings</span><span data-i18n="nav.settings">Pengaturan</span></a>
+        <a href="about.html" class="sidebar-link"><span class="material-symbols-rounded">info</span><span data-i18n="nav.about">Tentang</span></a>
+      </nav>
+      <div class="p-3 border-t border-slate-100 dark:border-slate-800/60 flex-shrink-0">
+        <button class="js-logout sidebar-link w-full text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600">
+          <span class="material-symbols-rounded">logout</span><span data-i18n="topbar.logout">Keluar</span>
+        </button>
+      </div>
+    </aside>
+    <div id="sidebarOverlay" class="hidden fixed inset-0 bg-black/40 z-30 lg:hidden"></div>
+
+    <div class="flex-1 flex flex-col overflow-hidden">
+      <!-- TOPBAR -->
+      <header class="h-16 flex items-center justify-between px-4 sm:px-6 border-b border-slate-100 dark:border-slate-800/60 bg-white/80 dark:bg-[#0B1220]/80 backdrop-blur sticky top-0 z-20 flex-shrink-0">
+        <div class="flex items-center gap-3">
+          <button id="sidebarOpenBtn" class="lg:hidden text-slate-500 dark:text-slate-300"><span class="material-symbols-rounded">menu</span></button>
+          <h1 class="font-semibold text-lg">Riwayat Penilaian</h1>
+        </div>
+        <a href="assessment.html" class="btn btn-primary text-sm px-4 py-2 hidden sm:inline-flex"><span class="material-symbols-rounded" style="font-size:18px">add</span>Assessment Baru</a>
+      </header>
+
+      <main class="flex-1 overflow-y-auto scrollbar-thin p-4 sm:p-6 lg:p-8 page-enter">
+
+        <!-- Filters -->
+        <div class="flex flex-col sm:flex-row gap-3 mb-5">
+          <div class="relative flex-1">
+            <span class="material-symbols-rounded absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" style="font-size:20px">search</span>
+            <input type="text" id="searchInput" class="field-input pl-11" placeholder="Cari berdasarkan kelas atau materi..." />
+          </div>
+          <select id="filterSelect" class="field-input sm:w-56">
+            <option value="all">Semua Status</option>
+            <option value="success">Sangat Baik</option>
+            <option value="info">Baik</option>
+            <option value="warning">Cukup</option>
+            <option value="danger">Perlu Ditingkatkan</option>
+          </select>
+        </div>
+
+        <!-- Table -->
+        <div class="surface-card overflow-hidden">
+          <div class="overflow-x-auto scrollbar-thin">
+            <table class="w-full text-sm min-w-[640px]">
+              <thead>
+                <tr class="border-b border-slate-100 dark:border-slate-800 text-left">
+                  <th class="px-5 py-3.5 font-semibold text-xs text-slate-400 uppercase tracking-wide">Tanggal</th>
+                  <th class="px-5 py-3.5 font-semibold text-xs text-slate-400 uppercase tracking-wide">Kelas</th>
+                  <th class="px-5 py-3.5 font-semibold text-xs text-slate-400 uppercase tracking-wide">Materi</th>
+                  <th class="px-5 py-3.5 font-semibold text-xs text-slate-400 uppercase tracking-wide">Skor</th>
+                  <th class="px-5 py-3.5 font-semibold text-xs text-slate-400 uppercase tracking-wide">Status</th>
+                  <th class="px-5 py-3.5 font-semibold text-xs text-slate-400 uppercase tracking-wide text-right">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody"></tbody>
+            </table>
+          </div>
+
+          <!-- Empty state -->
+          <div id="emptyState" class="hidden text-center py-14 px-6">
+            <img id="emptyStateImg" src="assets/illustrations/nohistory.svg" class="w-44 mx-auto mb-5" alt="Tidak ada data" />
+            <p class="font-semibold" id="emptyStateTitle">Belum ada riwayat</p>
+            <p class="text-sm text-slate-400 mt-1" id="emptyStateDesc">Mulai penilaian pertamamu untuk melihatnya di sini.</p>
+          </div>
+
+          <!-- Pagination -->
+          <div id="paginationBar" class="hidden flex-wrap items-center justify-between gap-3 px-5 py-4 border-t border-slate-100 dark:border-slate-800">
+            <p class="text-xs text-slate-400" id="paginationInfo">Menampilkan 1-5 dari 5</p>
+            <div class="flex items-center gap-2">
+              <button id="prevPageBtn" class="btn btn-outline px-3 py-1.5 text-xs"><span class="material-symbols-rounded" style="font-size:16px">chevron_left</span></button>
+              <span class="text-xs font-medium px-2" id="pageIndicator">Halaman 1 dari 1</span>
+              <button id="nextPageBtn" class="btn btn-outline px-3 py-1.5 text-xs"><span class="material-symbols-rounded" style="font-size:16px">chevron_right</span></button>
+            </div>
+          </div>
+        </div>
+
+        <a href="assessment.html" class="btn btn-primary w-full mt-4 sm:hidden"><span class="material-symbols-rounded" style="font-size:18px">add</span>Assessment Baru</a>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/history.js"></script>
+</body>
+</html>
