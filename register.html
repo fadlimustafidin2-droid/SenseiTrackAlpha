@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Daftar — SenseiTrack</title>
+  <link rel="icon" type="image/svg+xml" href="assets/images/logosenseitrack.svg" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: { extend: {
+        fontFamily: { sans: ['Poppins', 'sans-serif'] },
+        colors: {
+          primary: { DEFAULT: '#2563EB', light: '#3B82F6', dark: '#1D4ED8' },
+          secondary: { DEFAULT: '#14B8A6', light: '#2DD4BF', dark: '#0D9488' },
+        },
+        boxShadow: {
+          soft: '0 10px 30px -10px rgba(15,23,42,0.12)',
+          glow: '0 10px 25px -6px rgba(37,99,235,0.35)',
+        },
+      } },
+    };
+  </script>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <script src="js/storage.js"></script>
+  <script src="js/app.js"></script>
+  <script>App.redirectIfAuthed();</script>
+</head>
+<body class="min-h-screen bg-surface dark:bg-[#0B1220] font-sans text-ink dark:text-slate-100">
+
+  <div class="min-h-screen flex">
+    <!-- LEFT — brand panel (desktop only) -->
+    <div class="hidden lg:flex lg:w-[52%] relative overflow-hidden">
+      <img src="assets/images/herobackground16-9.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-br from-secondary-dark/92 via-primary/85 to-primary-dark/90"></div>
+
+      <svg class="absolute -right-24 -top-24 w-[30rem] h-[30rem] opacity-20" viewBox="0 0 200 200" fill="none">
+        <circle cx="100" cy="100" r="95" stroke="white" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="75" stroke="white" stroke-width="1.5"/>
+        <circle cx="100" cy="100" r="55" stroke="white" stroke-width="1.5"/>
+      </svg>
+
+      <div class="relative z-10 flex flex-col justify-between p-12 w-full text-white">
+        <div class="flex items-center gap-3">
+          <img src="assets/images/logosenseitrack.svg" alt="Logo SenseiTrack" class="w-11 h-11 rounded-xl bg-white/90 p-1.5 object-contain" />
+          <span class="font-bold text-xl tracking-tight">SenseiTrack</span>
+        </div>
+
+        <div class="max-w-md">
+          <img src="assets/illustrations/schoolilustration.png" alt="Ilustrasi guru dan sekolah" class="w-64 mb-8 drop-shadow-2xl" />
+          <h1 class="text-3xl font-bold leading-tight mb-3">Satu akun untuk seluruh<br />perjalanan refleksi mengajarmu.</h1>
+          <p class="text-white/80 text-sm leading-relaxed">Daftar sebagai guru untuk mulai self assessment, atau sebagai admin sekolah kalau kamu bertugas memantau perkembangan tim pengajar.</p>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <img src="assets/icons/senseitrackmaskot.png" alt="" class="w-12 h-12 object-contain drop-shadow-lg" />
+          <p class="text-xs text-white/70">Gratis, ringan, dan datanya tersimpan langsung di perangkatmu.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT — register form -->
+    <div class="flex-1 flex flex-col justify-center px-6 sm:px-10 lg:px-16 py-10 relative">
+
+      <button id="themeToggleBtn" class="absolute top-6 right-6 w-10 h-10 rounded-full surface-card flex items-center justify-center text-slate-500 dark:text-slate-300 hover:text-primary transition-colors" aria-label="Ganti mode tampilan">
+        <span class="material-symbols-rounded icon-theme" style="font-size:20px">dark_mode</span>
+      </button>
+
+      <div class="w-full max-w-sm mx-auto">
+
+        <div class="lg:hidden relative rounded-2xl overflow-hidden h-36 mb-8 shadow-soft">
+          <img src="assets/images/herobackground9-16.jpg" alt="" class="absolute inset-0 w-full h-full object-cover" />
+          <div class="absolute inset-0 bg-gradient-to-t from-primary-dark/90 to-secondary-dark/60"></div>
+          <div class="relative z-10 h-full flex items-center gap-3 px-5">
+            <img src="assets/images/logosenseitrack.svg" alt="Logo SenseiTrack" class="w-10 h-10 rounded-lg bg-white/90 p-1 object-contain" />
+            <span class="font-bold text-lg text-white tracking-tight">SenseiTrack</span>
+          </div>
+        </div>
+
+        <div class="mb-7">
+          <h2 class="text-2xl font-bold mb-1.5">Buat akun baru</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400">Isi datamu di bawah ini untuk mulai pakai SenseiTrack.</p>
+        </div>
+
+        <form id="registerForm" novalidate>
+          <div class="mb-4">
+            <label for="regName" class="field-label">Nama Lengkap</label>
+            <input type="text" id="regName" class="field-input" placeholder="Contoh: Dewi Anggraini, S.Pd." autocomplete="name" />
+            <p class="field-error-text" id="regNameError">Nama wajib diisi.</p>
+          </div>
+
+          <div class="mb-4">
+            <label for="regEmail" class="field-label">Email</label>
+            <input type="email" id="regEmail" class="field-input" placeholder="nama@sekolah.id" autocomplete="username" />
+            <p class="field-error-text" id="regEmailError">Masukkan email yang valid dan belum terdaftar.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label for="regPassword" class="field-label">Kata Sandi</label>
+              <input type="password" id="regPassword" class="field-input" placeholder="Min. 6 karakter" autocomplete="new-password" />
+            </div>
+            <div>
+              <label for="regConfirmPassword" class="field-label">Konfirmasi</label>
+              <input type="password" id="regConfirmPassword" class="field-input" placeholder="Ulangi kata sandi" autocomplete="new-password" />
+            </div>
+          </div>
+          <p class="field-error-text mb-4" id="regPasswordError">Kata sandi minimal 6 karakter dan harus cocok.</p>
+
+          <label class="flex items-center gap-2 cursor-pointer select-none mb-3">
+            <input type="checkbox" id="regIsAdmin" class="w-4 h-4 rounded accent-primary" />
+            <span class="text-sm text-slate-600 dark:text-slate-300">Saya punya kode akses Admin</span>
+          </label>
+
+          <div id="adminCodeWrap" class="hidden mb-5">
+            <label for="regAdminCode" class="field-label">Kode Admin</label>
+            <input type="text" id="regAdminCode" class="field-input" placeholder="Masukkan kode dari sekolah/koordinator" />
+            <p class="field-error-text" id="regAdminCodeError">Kode admin tidak sesuai.</p>
+          </div>
+
+          <button type="submit" id="registerSubmitBtn" class="btn btn-primary w-full py-3">
+            <span class="material-symbols-rounded spinner hidden" id="registerSpinner" style="font-size:18px">progress_activity</span>
+            <span id="registerSubmitLabel">Daftar</span>
+          </button>
+        </form>
+
+        <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
+          Sudah punya akun? <a href="index.html" class="text-primary font-semibold hover:underline">Masuk di sini</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/register.js"></script>
+</body>
+</html>
