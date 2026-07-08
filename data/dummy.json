@@ -1,0 +1,93 @@
+{
+  "_readme": "File ini adalah dokumentasi struktur data SenseiTrack v2. Data yang benar-benar dipakai aplikasi saat runtime disimpan di localStorage dan di-seed/di-migrasi dari js/storage.js (bukan dari fetch ke file ini), karena membuka index.html langsung dari file:// akan diblokir browser saat fetch file lokal. Struktur di bawah ini harus selalu sinkron dengan konstanta di js/storage.js. v2 menambahkan multi-akun (role guru/admin) — lihat accountSchema di bawah, menggantikan konsep 'profile' tunggal di v1.",
+
+  "adminInviteCode": "Lihat konstanta ADMIN_INVITE_CODE di js/storage.js — sengaja tidak ditulis di sini/di UI, hanya dibagikan ke pihak yang berhak jadi Admin.",
+
+  "demoAccounts": [
+    { "email": "admin@senseitrack.id", "password": "123456", "role": "admin", "note": "Kepala sekolah/pengawas, juga masih bisa isi assessment sendiri lewat mode Guru." },
+    { "email": "siti@senseitrack.id", "password": "123456", "role": "guru" },
+    { "email": "budi@senseitrack.id", "password": "123456", "role": "guru" }
+  ],
+
+  "accountSchema": {
+    "id": "ACC-XXXXXXX",
+    "role": "guru | admin",
+    "name": "string", "email": "string (unik antar akun)", "password": "string (plain text — ini demo lokal, bukan produksi)",
+    "phone": "string", "birthDate": "YYYY-MM-DD", "gender": "Laki-laki | Perempuan",
+    "school": "string", "nip": "string", "subject": "string", "level": "string", "joinDate": "YYYY-MM-DD",
+    "avatar": "data URL base64 atau null",
+    "createdAt": "ISO datetime string"
+  },
+
+  "indicatorBank": [
+    {
+      "category": "pedagogik",
+      "label": "Kompetensi Pedagogik",
+      "icon": "school",
+      "items": [
+        { "id": "PED-1", "text": "Saya menyusun rencana pembelajaran (RPP/modul ajar) yang sesuai dengan karakteristik peserta didik." },
+        { "id": "PED-2", "text": "Saya menggunakan media dan metode pembelajaran yang variatif sesuai materi yang diajarkan." },
+        { "id": "PED-3", "text": "Saya melakukan penilaian dan evaluasi pembelajaran secara berkala untuk mengukur pemahaman siswa." },
+        { "id": "PED-4", "text": "Saya memberikan umpan balik yang membangun terhadap hasil belajar peserta didik." }
+      ]
+    },
+    {
+      "category": "profesional",
+      "label": "Kompetensi Profesional",
+      "icon": "workspace_premium",
+      "items": [
+        { "id": "PRO-1", "text": "Saya menguasai materi pelajaran yang saya ajarkan secara mendalam." },
+        { "id": "PRO-2", "text": "Saya mengikuti pelatihan, seminar, atau workshop untuk mengembangkan kompetensi keprofesian." },
+        { "id": "PRO-3", "text": "Saya memanfaatkan teknologi digital untuk mendukung proses pembelajaran." },
+        { "id": "PRO-4", "text": "Saya melakukan refleksi dan perbaikan berkelanjutan terhadap praktik mengajar saya." }
+      ]
+    },
+    {
+      "category": "kepribadian",
+      "label": "Kompetensi Kepribadian",
+      "icon": "self_improvement",
+      "items": [
+        { "id": "KEP-1", "text": "Saya bertindak sesuai dengan norma agama, hukum, sosial, dan kebudayaan nasional." },
+        { "id": "KEP-2", "text": "Saya menunjukkan etos kerja, tanggung jawab, dan kedisiplinan sebagai pendidik." },
+        { "id": "KEP-3", "text": "Saya menjadi teladan yang baik bagi peserta didik dalam sikap dan perilaku sehari-hari." }
+      ]
+    },
+    {
+      "category": "sosial",
+      "label": "Kompetensi Sosial",
+      "icon": "diversity_3",
+      "items": [
+        { "id": "SOS-1", "text": "Saya berkomunikasi secara efektif dan santun dengan peserta didik, sesama guru, dan orang tua." },
+        { "id": "SOS-2", "text": "Saya berpartisipasi aktif dalam kegiatan sekolah dan komunitas profesi guru." },
+        { "id": "SOS-3", "text": "Saya bersikap inklusif dan tidak membeda-bedakan peserta didik dengan latar belakang berbeda." }
+      ]
+    }
+  ],
+
+  "likertLabels": ["Tidak Pernah", "Jarang", "Kadang-kadang", "Sering", "Selalu"],
+
+  "assessmentRecordSchema": {
+    "id": "AST-XXXXXXX",
+    "accountId": "ACC-XXXXXXX — menghubungkan penilaian ke akun pemiliknya",
+    "date": "YYYY-MM-DD",
+    "className": "string, contoh: VIII B",
+    "material": "string, contoh: Matematika — Pecahan",
+    "answers": [
+      {
+        "id": "PED-1",
+        "category": "pedagogik",
+        "categoryLabel": "Kompetensi Pedagogik",
+        "question": "string",
+        "score": "number 1-5",
+        "evidenceType": "text | image | file | video | audio",
+        "evidenceValue": "string teks, atau data URL base64 untuk gambar, atau nama file untuk tipe lain"
+      }
+    ],
+    "overallScore": "number, rata-rata seluruh skor",
+    "categoryScores": { "pedagogik": "number", "profesional": "number", "kepribadian": "number", "sosial": "number" },
+    "tier": { "label": "Sangat Baik | Baik | Cukup | Perlu Ditingkatkan", "tone": "success | info | warning | danger" },
+    "reflection": "string, catatan refleksi umum",
+    "followUp": "string, rencana tindak lanjut",
+    "createdAt": "ISO datetime string"
+  }
+}
